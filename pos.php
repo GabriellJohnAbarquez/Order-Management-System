@@ -77,6 +77,9 @@ body {
 
 #cartTable th, #cartTable td { vertical-align: middle; }
 #cartTable td { color: black; }
+#cartTable .cart-qty {
+    color: black;
+}
 #cartTable tbody tr { transition: background 0.15s; }
 #cartTable tbody tr:hover { background-color: rgba(0,123,255,0.05); }
 
@@ -755,11 +758,12 @@ $(document).on('click', '.view-order-btn', function() {
 
     if (items.length === 0) {
         $('#orderItemsContainer').html('<p class="text-muted">No items recorded for this order.</p>');
+        total = parseFloat(order.total) || 0;
     } else {
         const table = $(`<table class="table table-sm table-bordered">
             <thead class="table-light"><tr><th>Product</th><th style="width:70px">Qty</th><th style="width:100px">Price</th><th style="width:100px">Total</th></tr></thead><tbody></tbody></table>`);
         items.forEach(it => {
-            const itemTotal = parseFloat(it.price) * parseInt(it.qty);
+            const itemTotal = parseFloat(it.price) * parseInt(it.quantity);
             total += itemTotal;
             const name = it.product_name ?? ('Product #' + it.product_id);
             table.find('tbody').append(`<tr>
@@ -776,7 +780,7 @@ $(document).on('click', '.view-order-btn', function() {
     let paymentHtml = `
         <div class="row mb-2">
             <div class="col fw-bold">Total:</div>
-            <div class="col text-end fw-bold">₱${parseFloat(order.total).toFixed(2)}</div>
+            <div class="col text-end fw-bold">₱${total.toFixed(2)}</div>
         </div>
         <div class="row mb-2">
             <div class="col">Payment Method:</div>
